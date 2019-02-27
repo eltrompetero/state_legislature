@@ -11,7 +11,7 @@ class California():
     """
 
     @classmethod
-    def session(cls, year, house):
+    def session(cls, year, house, binarize=False):
         """
         1, yea
         6, no
@@ -23,6 +23,8 @@ class California():
         year : int
         house : str
             'ass' for Assembly or 'sen' for Senate
+        binarize : bool, False
+            If True, 1 is yea, -1 is nay, and 0 is any other vote.
 
         Returns
         -------
@@ -43,5 +45,13 @@ class California():
             raise Exception("Invalid year.")
 
         df = df.transpose()
+        names = df.iloc[0].values
+        df = df.iloc[1:]
+        df.columns = names
+
+        if binarize:
+            df[df==6] = -1
+            df[df==9] = 0
+            assert set(np.unique(df))<=set((-1,0,1)), np.unique(df)
         return df
 
