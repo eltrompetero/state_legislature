@@ -33,9 +33,9 @@ class California():
 
         fname = DATADR
         if 'sen' in house.lower():
-            fname += '/ca%d-%dvotes_senate.csv'%(year,year+1)
+            fname += '/ca%02d-%02dvotes_senate.csv'%(year,(year+1)%100)
         elif 'ass' in house.lower():
-            fname += '/ca%d-%dvotes_house.csv'%(year,year+1)
+            fname += '/ca%02d-%02dvotes_assembly.csv'%(year,(year+1)%100)
         else:
             raise Exception("Unrecognized house type.")
         
@@ -46,7 +46,7 @@ class California():
 
         df = df.transpose()
         names = df.iloc[0].values
-        df = df.iloc[1:]
+        df = df.iloc[1:].astype(int)
         df.columns = names
 
         if binarize:
@@ -54,4 +54,4 @@ class California():
             df[df==9] = 0
             assert set(np.unique(df))<=set((-1,0,1)), np.unique(df)
         return df
-
+#end California
